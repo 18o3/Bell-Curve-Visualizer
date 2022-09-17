@@ -1,0 +1,92 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', {
+      packages: ['corechart', 'line']
+    });
+    google.charts.setOnLoadCallback(drawBasic);
+
+    function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Y');
+
+      var newArr = new Map([
+        [1, 1],
+        [2, 1],
+        [3, 1],
+        [4, 1],
+        [5, 1],
+        [6, 1],
+      ]);
+
+      var n = prompt("Enter the number of dice(n) greater than 0 and less than 20");
+      console.log( typeof(n) );
+
+      if(n<=0)
+      {
+          alert("Enter a posistive value");
+          return;
+      }
+      if(n>=22)
+      {
+          alert("Input Too large Try Again");
+          return;
+      }
+
+      var mx=6*n+1;
+      while (n > 1) {
+        var temp = new Map([]);
+        n--;
+
+        newArr.forEach((value, key) => {
+          for (let i = 1; i <= 6; i++) {
+            var nval = i + key;
+            if (temp.has(nval) == true) {
+              var og = temp.get(nval);
+              temp.set(nval, og + value);
+            } else
+              temp.set(nval, value);
+          }
+        });
+
+        newArr.clear();
+
+        newArr.set(0,0);
+
+        temp.forEach((value, key) => {
+          newArr.set(key, value);
+        });
+      }
+      newArr.set(mx,0);
+
+      newArr.forEach((value, key) => {
+        data.addRows([
+          [key, value]
+        ]);
+      });
+
+      var options = {
+        hAxis: {
+          title: 'Sum on n dice'
+        },
+        vAxis: {
+          title: 'Frequency'
+        }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
+</head>
+
+<body>
+  <div id="chart_div" style="width: 900px; height: 500px"></div>
+</body>
+
+</html>
